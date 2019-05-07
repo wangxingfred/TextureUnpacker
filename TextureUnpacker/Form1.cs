@@ -146,15 +146,13 @@ namespace TextureUnpacker
 				return;
 			}
 
-			String path = path1;
-			path = path.Substring(0, path.LastIndexOf(@"\")).Trim();
-			path = path + "\\export";
-
-			//如果不存在就创建file文件夹
-			if (Directory.Exists(path) == false)
+			String unpackDir = Path.Combine(Path.GetDirectoryName(path1), Path.GetFileNameWithoutExtension(path1));
+			if (!Directory.Exists(unpackDir))
 			{
-				Directory.CreateDirectory(path);
+				Directory.CreateDirectory(unpackDir);
 			}
+
+            int savedCount = 0;
 
 			//导出
             //Plist
@@ -205,8 +203,19 @@ namespace TextureUnpacker
 							frame.frame,
 							GraphicsUnit.Pixel);
 					}
-					bmp.Save(path + "\\" + frame.name);
-				}
+
+                    var savePath = Path.Combine(unpackDir, flatten.Checked ? Path.GetFileName(frame.name) : frame.name);
+                    var saveDirectory = Path.GetDirectoryName(savePath);
+
+                    if (!Directory.Exists(saveDirectory))
+                    {
+                        Directory.CreateDirectory(saveDirectory);
+                    }
+
+                    bmp.Save(savePath);
+                    ++savedCount;
+
+                }
             }
             //Atlas
             else if (r2.Checked == true)
@@ -234,10 +243,37 @@ namespace TextureUnpacker
                             GraphicsUnit.Pixel);
                     }
                     pictureBox2.Image = bmp;
-                    bmp.Save(path + "\\" + region.name + ".png");
+
+
+                    var saveName = region.name + ".png";
+                    var savePath = Path.Combine(unpackDir, flatten.Checked ? Path.GetFileName(saveName) : saveName);
+                    var saveDirectory = Path.GetDirectoryName(savePath);
+
+                    if (!Directory.Exists(saveDirectory))
+                    {
+                        Directory.CreateDirectory(saveDirectory);
+                    }
+
+                    bmp.Save(savePath);
+                    ++savedCount;
                 }
             }
 
+            if (savedCount > 0)
+            {
+                var res = MessageBox.Show($"成功切割出{savedCount}张图片，是否打开目录?", "Succeed", 
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+
+                if (res == DialogResult.OK)
+                {
+                    System.Diagnostics.Process.Start("Explorer.exe", unpackDir);
+                }
+            }
+            else
+            {
+                MessageBox.Show($"未生成任何图片，资源可能存在异常", "Failed",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            }
         }
 
 		private void textBox1_DragEnter(object sender, DragEventArgs e)
@@ -285,6 +321,5 @@ namespace TextureUnpacker
 		{
 			button3_Click(sender, e);
 		}
-
     }
 }

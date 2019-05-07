@@ -1,0 +1,10 @@
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Debug\TextureUnpacker.exe.config
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Debug\TextureUnpacker.exe
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Debug\TextureUnpacker.pdb
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.Form1.resources
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.Properties.Resources.resources
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.csproj.GenerateResource.cache
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.csproj.CoreCompileInputs.cache
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.exe
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.pdb
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Debug\TextureUnpacker.csprojAssemblyReference.cache

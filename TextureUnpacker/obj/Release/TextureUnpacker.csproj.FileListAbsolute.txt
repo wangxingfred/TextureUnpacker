@@ -7,3 +7,12 @@ D:\Project\B\C_Sharp\切图工具\TextureUnpacker\obj\Release\TextureUnpacker.Pr
 D:\Project\B\C_Sharp\切图工具\TextureUnpacker\obj\Release\TextureUnpacker.csproj.GenerateResource.Cache
 D:\Project\B\C_Sharp\切图工具\TextureUnpacker\obj\Release\TextureUnpacker.exe
 D:\Project\B\C_Sharp\切图工具\TextureUnpacker\obj\Release\TextureUnpacker.pdb
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.Form1.resources
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.Properties.Resources.resources
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.csproj.GenerateResource.cache
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.csproj.CoreCompileInputs.cache
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.exe
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.pdb
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.exe.config
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.exe
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.pdb
