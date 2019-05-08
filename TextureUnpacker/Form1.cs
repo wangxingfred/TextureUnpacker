@@ -27,25 +27,7 @@ namespace TextureUnpacker
             openFileDialog1.ShowDialog();
 
             String path = openFileDialog1.FileName;
-            if (path != "")
-            {
-                textBox1.Text = path;
-				string pngfile = textBox1.Text.Substring(0, textBox1.Text.LastIndexOf('.')) + ".png";
-				if(File.Exists(pngfile))
-				{
-					textBox2.Text = pngfile;
-
-					if (textBox1.Text.Substring(textBox1.Text.LastIndexOf('.')) == ".plist")
-					{
-						r1.Checked = true;
-					}
-					else if(textBox1.Text.Substring(textBox1.Text.LastIndexOf('.')) == ".atlas")
-					{
-						r2.Checked = true;
-					}
-				}
-				button3_Click(sender, e);
-            }
+            if (path != "") SetPlist(path);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -59,84 +41,13 @@ namespace TextureUnpacker
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void BtnOpen_Click(object sender, EventArgs e)
         {
-            //try
-            {
-				String path1 = textBox1.Text;
-				String path2 = textBox2.Text;
-
-				if (path1 == "" || path2 == "")
-				{
-					return;
-				}
-
-                //Plist
-                if(r1.Checked==true)
-                {
-					plistLoad = new PlistLoad(path1);
-
-					Image img = Image.FromFile(path2);
-					Bitmap bmp = new Bitmap(img);
-					if (checkBox1.Checked == true)
-					{
-						Graphics g = Graphics.FromImage(bmp);
-						Pen pen = new Pen(Color.Red, 1);
-
-						foreach (PlistFrame frame in plistLoad.plistFile.frames)
-						{
-							if (frame.rotated == true)
-							{
-								g.DrawRectangle(pen, new Rectangle(
-									frame.frame.Left, 
-									frame.frame.Top,
-									frame.frame.Height,
-									frame.frame.Width));
-							}
-							else
-							{
-								g.DrawRectangle(pen, frame.frame);
-							}
-						}
-					}
-					pictureBox1.Image = bmp;
-                }
-                //Atlas
-                else if (r2.Checked == true)
-                {
-					atlasLoad = new AtlasLoad(path1);
-
-                    Image img = Image.FromFile(path2);
-
-                    Bitmap bmp = new Bitmap(img);
-                    if (checkBox1.Checked == true)
-                    {
-                        Graphics g = Graphics.FromImage(bmp);
-                        Pen pen = new Pen(Color.Red, 1);
-
-                        foreach (AtlasRegion region in atlasLoad.List_atlasFile[0].region)
-                        {
-                            if (region.rotate == true)
-                            {
-                                g.DrawRectangle(pen, new Rectangle(region.xy, new Size(region.size.Height, region.size.Width)));
-                            }
-                            else
-                            {
-                                g.DrawRectangle(pen, new Rectangle(region.xy, region.size));
-                            }
-                        }
-                    }
-                    pictureBox1.Image = bmp;
-                }
-            }
-            //catch
-            //{
-            //    MessageBox.Show("路径或格式错误");
-            //}
+            OpenImage();
         }
 
 
-        private void button4_Click(object sender, EventArgs e)
+        private void BtnUnpack_Click(object sender, EventArgs e)
         {
 			String path1 = textBox1.Text;
 			String path2 = textBox2.Text;
@@ -154,20 +65,22 @@ namespace TextureUnpacker
 
             int savedCount = 0;
 
-			//导出
+            Bitmap source = ImageLoad.FileToBitmap(path2);
+
+            //导出
             //Plist
             if (r1.Checked == true)
             {
 				foreach(PlistFrame frame in  plistLoad.plistFile.frames)
 				{
 					Bitmap bmp;
-					Image img = Image.FromFile(path2);
+
 					if (frame.rotated == true)
 					{
 						bmp = new Bitmap(frame.sourceSize.Height, frame.sourceSize.Width);
 						Graphics g = Graphics.FromImage(bmp);
 
-						g.DrawImage(img,
+						g.DrawImage(source,
 							new Rectangle(
 								(frame.sourceSize.Height - frame.frame.Height) / 2 + frame.offset.Y,
 								(frame.sourceSize.Width - frame.frame.Width) / 2 + frame.offset.X,
@@ -194,7 +107,7 @@ namespace TextureUnpacker
 								frame.frame.Width,
 								frame.frame.Height);
 
-						g.DrawImage(img,
+						g.DrawImage(source,
 							new Rectangle(
 								(frame.sourceSize.Width - frame.frame.Width )/ 2 + frame.offset.X,
 								(frame.sourceSize.Height - frame.frame.Height) / 2 - frame.offset.Y,
@@ -222,22 +135,20 @@ namespace TextureUnpacker
             {
                 foreach (AtlasRegion region in atlasLoad.List_atlasFile[0].region)
                 {
-                    Bitmap bmp;
-					Image img = Image.FromFile(path2);
-                    bmp = new Bitmap(region.orig.Width, region.orig.Height);
+                    Bitmap bmp = new Bitmap(region.orig.Width, region.orig.Height);
                     Graphics g = Graphics.FromImage(bmp);
                     if (region.rotate == true)
                     {
                         g.TranslateTransform(region.orig.Width, 0.0F);
                         g.RotateTransform(90.0F);
-                        g.DrawImage(img,
+                        g.DrawImage(source,
                             new Rectangle(new Point(region.offset.Y, region.offset.X), new Size(region.size.Height, region.size.Width)),
                             new Rectangle(region.xy, new Size(region.size.Height, region.size.Width)),
                             GraphicsUnit.Pixel);
                     }
                     else
                     {
-                        g.DrawImage(img,
+                        g.DrawImage(source,
                             new Rectangle(region.offset, region.orig),
                             new Rectangle(region.xy, region.size),
                             GraphicsUnit.Pixel);
@@ -285,24 +196,10 @@ namespace TextureUnpacker
 
 		private void textBox1_DragDrop(object sender, DragEventArgs e)
 		{
-			string path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
-			textBox1.Text = path;
-			string pngfile = textBox1.Text.Substring(0, textBox1.Text.LastIndexOf('.')) + ".png";
-			if (File.Exists(pngfile))
-			{
-				textBox2.Text = pngfile;
+			var path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
 
-				if (textBox1.Text.Substring(textBox1.Text.LastIndexOf('.')) == ".plist")
-				{
-					r1.Checked = true;
-				}
-				else if (textBox1.Text.Substring(textBox1.Text.LastIndexOf('.')) == ".atlas")
-				{
-					r2.Checked = true;
-				}
-			}
-			button3_Click(sender, e);
-		}
+            SetPlist(path);
+        }
 
 		private void textBox2_DragEnter(object sender, DragEventArgs e)
 		{
@@ -319,7 +216,111 @@ namespace TextureUnpacker
 
 		private void checkBox1_CheckedChanged(object sender, EventArgs e)
 		{
-			button3_Click(sender, e);
+			BtnOpen_Click(sender, e);
 		}
+
+
+        private void SetPlist(string filePath)
+        {
+            var ext = Path.GetExtension(filePath);
+
+            if (ext == ".plist") r1.Checked = true;
+            else 
+            if (ext == ".atlas") r2.Checked = true;
+            else return;
+
+            textBox1.Text = filePath;
+
+            var dir = Path.GetDirectoryName(filePath);
+            var filename = Path.GetFileNameWithoutExtension(filePath);
+
+            var files = Directory.GetFiles(dir);
+            foreach (var file in files)
+            {
+                if (file == filePath) continue;
+
+                if (Path.GetFileNameWithoutExtension(file) == filename)
+                {
+                    textBox2.Text = file;
+
+                    if (OpenImage()) return;
+                }
+            }
+        }
+
+        private bool OpenImage()
+        {
+            try {
+                String path1 = textBox1.Text;
+                String path2 = textBox2.Text;
+
+                if (path1 == "" || path2 == "") return false;
+
+                //Plist
+                if (r1.Checked == true)
+                {
+                    plistLoad = new PlistLoad(path1);
+
+                    //Image img = Image.FromFile(path2);
+                    //Bitmap bmp = new Bitmap(img);
+                    Bitmap source = ImageLoad.FileToBitmap(path2);
+                    if (checkBox1.Checked == true)
+                    {
+                        Graphics g = Graphics.FromImage(source);
+                        Pen pen = new Pen(Color.Red, 1);
+
+                        foreach (PlistFrame frame in plistLoad.plistFile.frames)
+                        {
+                            if (frame.rotated == true)
+                            {
+                                g.DrawRectangle(pen, new Rectangle(
+                                    frame.frame.Left,
+                                    frame.frame.Top,
+                                    frame.frame.Height,
+                                    frame.frame.Width));
+                            }
+                            else
+                            {
+                                g.DrawRectangle(pen, frame.frame);
+                            }
+                        }
+                    }
+                    pictureBox1.Image = source;
+                }
+                //Atlas
+                else if (r2.Checked == true)
+                {
+                    atlasLoad = new AtlasLoad(path1);
+
+                    Bitmap bmp = ImageLoad.FileToBitmap(path2);
+
+                    if (checkBox1.Checked == true)
+                    {
+                        Graphics g = Graphics.FromImage(bmp);
+                        Pen pen = new Pen(Color.Red, 1);
+
+                        foreach (AtlasRegion region in atlasLoad.List_atlasFile[0].region)
+                        {
+                            if (region.rotate == true)
+                            {
+                                g.DrawRectangle(pen, new Rectangle(region.xy, new Size(region.size.Height, region.size.Width)));
+                            }
+                            else
+                            {
+                                g.DrawRectangle(pen, new Rectangle(region.xy, region.size));
+                            }
+                        }
+                    }
+                    pictureBox1.Image = bmp;
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "无法打开图片", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
