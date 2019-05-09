@@ -17,3 +17,7 @@ I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.ex
 I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.exe
 I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.pdb
 I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.csprojAssemblyReference.cache
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.exe.manifest
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.exe.manifest
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\bin\Release\TextureUnpacker.application
+I:\GitHub\graphic_TextureUnpacker\TextureUnpacker\obj\Release\TextureUnpacker.application

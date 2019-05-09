@@ -153,8 +153,6 @@ namespace TextureUnpacker
                             new Rectangle(region.xy, region.size),
                             GraphicsUnit.Pixel);
                     }
-                    pictureBox2.Image = bmp;
-
 
                     var saveName = region.name + ".png";
                     var savePath = Path.Combine(unpackDir, flatten.Checked ? Path.GetFileName(saveName) : saveName);
